@@ -8,16 +8,16 @@ export class AuthController {
 
   // 로그인
   @Post('/login')
-  async login(@Body() loginData: LoginDTO) {
-    console.log(loginData);
-    return loginData;
+  async login(@Body() loginDTO: LoginDTO) {
+    console.log(loginDTO);
+    return loginDTO;
   }
 
   // 회원가입
   @Post('/join')
-  async join(@Body() joinData: JoinDTO) {
-    const result = await this.authService.join(joinData);
-    console.log(result);
+  async join(@Body() joinDTO: JoinDTO) {
+    const result = await this.authService.join(joinDTO);
+    console.log('결과', result);
     return result;
   }
 }

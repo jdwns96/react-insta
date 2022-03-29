@@ -11,10 +11,16 @@ export class AuthService {
     @InjectRepository(Auth) private readonly auth: Repository<Auth>,
   ) {}
 
-  public login(loginData: LoginDTO) {
+  public login(loginDTO: LoginDTO) {
     return this.auth.find();
   }
-  public join(joinData: JoinDTO) {
-    return this.auth.create(joinData).save();
+  public join(joinDTO: JoinDTO) {
+    return this.auth
+      .create({
+        user_id: joinDTO.id,
+        password: joinDTO.password,
+        name: joinDTO.name,
+      })
+      .save();
   }
 }
