@@ -1,4 +1,4 @@
 # .next // docker 내부에서 next build 이슈가 있어서 로컬에서 빌드후 배포해야할것 같다.
-.git
-node_modules
-.gitignore
+# .git
+# node_modules
+# .gitignore
