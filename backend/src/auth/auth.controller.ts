@@ -9,15 +9,12 @@ export class AuthController {
   // 로그인
   @Post('/login')
   async login(@Body() loginDTO: LoginDTO) {
-    console.log(loginDTO);
-    return loginDTO;
+    return await this.authService.login(loginDTO);
   }
 
   // 회원가입
   @Post('/join')
   async join(@Body() joinDTO: JoinDTO) {
-    const result = await this.authService.join(joinDTO);
-    console.log('결과', result);
-    return result;
+    return await this.authService.join(joinDTO);
   }
 }
