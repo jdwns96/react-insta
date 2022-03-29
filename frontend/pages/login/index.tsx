@@ -1,16 +1,25 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 // component
 import Header from "../../components/templates/header";
+import Footer from "../../components/templates/footer";
 
 const Login: NextPage = () => {
+  const router = useRouter();
+
   return (
     <>
       <Header />
       <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md w-full space-y-8">
+        <div
+          className="max-w-md w-full space-y-8 bg-white p-8 border-gray-500"
+          style={{
+            border: "1px solid gray",
+          }}
+        >
           <div>
             {/* <Image
             className="mx-auto h-12 w-auto"
@@ -23,7 +32,7 @@ const Login: NextPage = () => {
             </h2>
             <p className="mt-2 text-center text-sm text-gray-600"></p>
           </div>
-          <form className="mt-8 space-y-6" action="#" method="POST">
+          <form className="mt-8 space-y-6">
             <input type="hidden" name="remember" value="true" />
             <div className="rounded-md shadow-sm -space-y-px">
               <div>
@@ -58,12 +67,25 @@ const Login: NextPage = () => {
                 type="submit"
                 className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
-                Login
+                로그인
+              </button>
+            </div>
+            <div>
+              <button
+                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md   border-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  router.push("/join");
+                }}
+              >
+                회원 가입
               </button>
             </div>
           </form>
         </div>
       </div>
+      <Footer />
     </>
   );
 };
