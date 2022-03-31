@@ -1,8 +1,8 @@
 import { IsString } from 'class-validator';
 
-export class JoinDTO {
+export class CreateUserDTO {
   @IsString()
-  readonly id: string;
+  readonly user_id: string;
 
   @IsString()
   readonly password: string;
@@ -13,7 +13,7 @@ export class JoinDTO {
 
 export class LoginDTO {
   @IsString()
-  readonly id: string;
+  readonly user_id: string;
 
   @IsString()
   readonly password: string;

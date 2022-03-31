@@ -1,7 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-
+// pipe
 import { ValidationPipe } from '@nestjs/common';
+// session
+import * as session from 'express-session';
+import * as passport from 'passport';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,6 +17,17 @@ async function bootstrap() {
       transform: true, // 요청에서 넘어온 자료들의 형변환
     }),
   );
+
+  // session
+  app.use(
+    session({
+      secret: '6m1dHJmicq9MfwpD6rra',
+      resave: false,
+      saveUninitialized: false,
+    }),
+  );
+  app.use(passport.initialize());
+  app.use(passport.session());
 
   await app.listen(5000);
 }
