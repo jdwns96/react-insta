@@ -3,12 +3,45 @@ import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
+// lib
+import axios from "axios";
+
 // component
 import Header from "../../components/templates/header";
 import Footer from "../../components/templates/footer";
+import { useState } from "react";
 
 const Login: NextPage = () => {
   const router = useRouter();
+
+  // state
+  const [form, setForm] = useState({
+    user_id: "",
+    password: "",
+  });
+
+  // event
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm((prevState) => {
+      return {
+        ...prevState,
+        [e.target.name]: e.target.value,
+      };
+    });
+  };
+
+  const onSubmit = (e: React.FormEvent) => {
+    console.log("로그인");
+    e.stopPropagation();
+    e.preventDefault();
+    const { user_id, password } = form;
+
+    axios
+      .post("http://localhost:8080/api/user/login", { ...form })
+      .then((res) => {
+        console.log(res);
+      });
+  };
 
   return (
     <>
@@ -32,7 +65,7 @@ const Login: NextPage = () => {
             </h2>
             <p className="mt-2 text-center text-sm text-gray-600"></p>
           </div>
-          <form className="mt-8 space-y-6">
+          <form className="mt-8 space-y-6" onSubmit={onSubmit}>
             <input type="hidden" name="remember" value="true" />
             <div className="rounded-md shadow-sm ">
               <div className="mb-3">
@@ -41,11 +74,13 @@ const Login: NextPage = () => {
                 </label>
                 <input
                   id="email-address"
-                  name="email"
-                  type="email"
+                  name="user_id"
+                  type="text"
                   required
                   className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                   placeholder="아이디"
+                  value={form.user_id}
+                  onChange={onChange}
                 />
               </div>
               <div>
@@ -59,6 +94,8 @@ const Login: NextPage = () => {
                   required
                   className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900  focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                   placeholder="비밀번호"
+                  value={form.password}
+                  onChange={onChange}
                 />
               </div>
             </div>

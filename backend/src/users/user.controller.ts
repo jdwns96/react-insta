@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Request } from '@nestjs/common';
 import { CreateUserDTO, LoginDTO } from './dto/user.dto';
 import { UserService } from './user.service';
 
@@ -14,8 +14,11 @@ export class UserController {
 
   // @로그인
   @Post('/login')
-  async login(@Body() loginDTO: LoginDTO) {
-    return await this.userService.login(loginDTO);
+  async login(@Body() loginDTO: LoginDTO, @Request() req) {
+    const user = await this.userService.login(loginDTO);
+    req.session.userId = user.id;
+    req.session.save();
+    return user;
   }
 
   // @회원가입

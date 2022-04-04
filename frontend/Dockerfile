@@ -9,8 +9,9 @@ RUN npm install
 
 COPY ./ ./
 
-ENV NODE_ENV production
+# ENV NODE_ENV production
 
 RUN npm run build
 
-CMD ["npm", "run", "start"]
+# CMD ["npm", "run", "start"] // 배포
+CMD ["npm", "run", "dev"]

@@ -8,6 +8,7 @@ import * as passport from 'passport';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  // app.enableCors();
 
   // 전역 범위 파이프
   app.useGlobalPipes(
