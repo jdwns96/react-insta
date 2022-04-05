@@ -1,4 +1,11 @@
-import { Body, Controller, Get, Post, Request } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Request,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { CreateUserDTO, LoginDTO } from './dto/user.dto';
 import { UserService } from './user.service';
 
@@ -10,6 +17,17 @@ export class UserController {
   @Get()
   async test() {
     return 'OK';
+  }
+
+  @Post()
+  async check(@Request() req) {
+    console.log(req.session);
+    if (req.session.userId !== undefined) {
+      return {
+        user_id: req.session.userId,
+      };
+    }
+    throw new UnauthorizedException('인증되지 않은 사용자입니다.');
   }
 
   // @로그인

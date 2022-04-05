@@ -5,14 +5,24 @@ import { useRouter } from "next/router";
 
 // lib
 import axios from "axios";
+import useSWR from "swr";
+import useUser from "../../swr/user";
 
 // component
 import Header from "../../components/templates/header";
 import Footer from "../../components/templates/footer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Login: NextPage = () => {
   const router = useRouter();
+  const { user, mutate, loggedOut } = useUser();
+
+  // if logged in, redirect to the dashboard
+  useEffect(() => {
+    if (user && !loggedOut) {
+      router.replace("/");
+    }
+  }, [user, loggedOut]);
 
   // state
   const [form, setForm] = useState({
@@ -41,6 +51,8 @@ const Login: NextPage = () => {
       .then((res) => {
         console.log(res);
       });
+
+    mutate();
   };
 
   return (
