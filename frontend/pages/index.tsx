@@ -6,7 +6,7 @@ import { useEffect } from "react";
 
 import useUser from "../swr/user";
 
-const Home: NextPage = () => {
+const Home = () => {
   const router = useRouter();
   const { user, loading, loggedOut, mutate } = useUser();
 
@@ -19,7 +19,7 @@ const Home: NextPage = () => {
 
   if (loggedOut) return "redirecting...";
 
-  return <div></div>;
+  return <div>홈화면</div>;
 };
 
 export default Home;

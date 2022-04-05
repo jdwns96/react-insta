@@ -7,8 +7,10 @@ const userAPI = async () => {
 };
 
 export default function useUser() {
-  const { data, mutate, error } = useSWR("api_user", userAPI);
-  console.dir(error);
+  const { data, mutate, error } = useSWR("api_user", userAPI, {
+    shouldRetryOnError: false,
+    revalidateOnFocus: false,
+  });
 
   const loading = !data && !error;
   const loggedOut = error;
