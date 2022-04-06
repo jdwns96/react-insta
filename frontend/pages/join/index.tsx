@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 // fetch
 import axios from "axios";
@@ -11,20 +12,18 @@ import useUser from "../../swr/user";
 // component
 import Header from "../../components/templates/header";
 import Footer from "../../components/templates/footer";
-import { useRouter } from "next/router";
+import Spinner from "../../components/common/Spinner";
 
 const Login: NextPage = () => {
   const router = useRouter();
-  const { user, mutate, loggedOut } = useUser();
-  // swr
-  // const { data } = useSWR(`/api/auth`, async (url: string) => axios.get(url));
+  const { user, loggedOut } = useUser();
 
   // if logged in, redirect to the dashboard
   useEffect(() => {
     if (user && !loggedOut) {
       router.replace("/");
     }
-  }, [user, loggedOut]);
+  }, [router, user, loggedOut]);
 
   // state
   const [form, setForm] = useState({
@@ -33,6 +32,7 @@ const Login: NextPage = () => {
     passwordCheck: "",
     name: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   // event
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,18 +44,33 @@ const Login: NextPage = () => {
     });
   };
 
-  const onSubmit = (e: React.FormEvent) => {
-    e.stopPropagation();
-    e.preventDefault();
-
-    const { id, password, passwordCheck, name } = form;
-
-    if (!(password === passwordCheck))
-      return alert("비밀번호가 일치하지 않습니다.");
+  const onSubmit = async (e: React.FormEvent) => {
+    try {
+      setIsLoading(true);
+      e.stopPropagation();
+      e.preventDefault();
+      const { id, password, passwordCheck, name } = form;
+      if (!(password === passwordCheck))
+        return alert("비밀번호가 일치하지 않습니다.");
+      const result = await axios.post("http://localhost:8080/api/user/join", {
+        user_id: id,
+        password,
+        name,
+      });
+      const { message, statusCode } = result.data;
+      if (statusCode === 201) alert(message);
+      router.push("/login");
+    } catch (e: any) {
+      const { error, message, statusCode } = e.response.data;
+      if (statusCode === 404) alert(message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <>
+      {isLoading && <Spinner />}
       <div className="min-h-screen flex flex-col">
         <Header />
         {/* <div className="w-full">

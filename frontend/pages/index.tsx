@@ -4,7 +4,13 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
+// swr
 import useUser from "../swr/user";
+
+// component
+import Header from "../components/templates/header";
+import Spinner from "../components/common/Spinner";
+import Nav from "../components/templates/nav";
 
 const Home = () => {
   const router = useRouter();
@@ -15,11 +21,19 @@ const Home = () => {
     if (loggedOut) {
       router.replace("/login");
     }
-  }, [loggedOut]);
+  }, [router, loggedOut]);
 
-  if (loggedOut) return "redirecting...";
+  if (loggedOut) return <Spinner />;
 
-  return <div>홈화면</div>;
+  return (
+    <>
+      <Header />
+      <Nav />
+      <div className="w-full">
+        <div className="max-w-[1024px] mx-auto">body</div>
+      </div>
+    </>
+  );
 };
 
 export default Home;

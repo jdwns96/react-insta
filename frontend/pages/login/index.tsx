@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
@@ -11,7 +12,7 @@ import useUser from "../../swr/user";
 // component
 import Header from "../../components/templates/header";
 import Footer from "../../components/templates/footer";
-import { useEffect, useState } from "react";
+import Spinner from "../../components/common/Spinner";
 
 const Login: NextPage = () => {
   const router = useRouter();
@@ -22,13 +23,14 @@ const Login: NextPage = () => {
     if (user && !loggedOut) {
       router.replace("/");
     }
-  }, [user, loggedOut]);
+  }, [router, user, loggedOut]);
 
   // state
   const [form, setForm] = useState({
     user_id: "",
     password: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   // event
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,22 +44,28 @@ const Login: NextPage = () => {
 
   const onSubmit = async (e: React.FormEvent) => {
     try {
-      console.log("로그인");
+      setIsLoading(true);
       e.stopPropagation();
       e.preventDefault();
       const { user_id, password } = form;
-
       const result = await axios.post("http://localhost:8080/api/user/login", {
-        ...form,
+        user_id,
+        password,
       });
-      mutate(); // 유저 swr 실행
-    } catch (e) {
-      alert("아이디 혹은 비밀번호가 일치하지 않습니다.");
+      const { status } = result;
+      if (status === 201) mutate(); // 유저 swr 실행
+    } catch (e: any) {
+      const { error, message, statusCode } = e.response.data;
+      if (statusCode === 401)
+        alert("아이디 혹은 비밀번호가 일치하지 않습니다.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <>
+      {isLoading && <Spinner />}
       <div className="min-h-screen flex flex-col">
         <Header />
         <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 flex-1 ">
